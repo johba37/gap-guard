@@ -54,7 +54,7 @@ yfinance raw bars + actions                   ┌──────────�
                               borrow/withdraw gated by RiskPolicy.maxLtvBps
 ```
 
-![architecture](docs/architecture.png)
+![architecture](docs/architecture.png) ([vector SVG](docs/architecture.svg) — regenerate both from this block with `tools/render-architecture.py`)
 
 Trust boundary: everything on-chain needs no operator. The only off-chain artifact
 that crosses the boundary is `student_export.json` (+ calendar table), pinned by
