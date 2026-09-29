@@ -2,7 +2,7 @@
 
 Status: v1.1 — 2026-09-29 (post-review re-plan: 2-day crash schedule, vol-oracle redefinition, spec hardening)
 Input: `goal.md` (hackathon goal document). This document resolves its open questions (§7), dispositions its risk register (§8), and pins the interfaces (§11) so three work lanes can proceed in parallel.
-Constraint: implementable and deployable in 4 days (D0–D4); v1.1 re-plan compresses to a **2-day crash schedule** (§6), submission **targeted for Oct 1, 23:59 SGT** (§2.4 — conservative planning deadline; the earlier T&Cs claim could not be re-verified, public sources say Oct 4).
+Constraint: implementable and deployable in 4 days (D0–D4); v1.1 re-plan compresses to a **2-day crash schedule** (§6) with submission planned **Sep 30 evening SGT**, well ahead of the confirmed **Oct 4** deadline (§2.4).
 Companion docs (prewritten, normative where marked): `docs/interfaces/*.md`, `README.md` skeleton.
 
 ---
@@ -71,8 +71,8 @@ These replace goal.md §7 guesses. Confidence and URLs included; time-sensitive 
 
 | Fact | Value | Source |
 |---|---|---|
-| **Deadline conflict** | Earlier draft cited a T&Cs PDF with submission deadline **Oct 1, 2026, 23:59 SGT**; winners Oct 4. **Could not be re-verified on 2026-09-29**: the T&Cs PDF was not locatable, and every public source — openhouse.arbitrum.io itself, the HackQuest event page, and mirrors — states submissions **Sep 13/14 – Oct 4**, winners **Oct 12**. Treat Oct 1 as unverified and likely stale. | re-verification 2026-09-29: openhouse.arbitrum.io, hackquest.io event page |
-| **Planning deadline** | **Unchanged: plan to Oct 1, 23:59 SGT** (submit Sep 30 evening SGT, per R13). Conservative under both readings — if the real deadline is Oct 4 we bank 4 days of slack. Confirm in event Discord (still outstanding) | — |
+| **Deadline** | Submissions **Sep 13/14 – Oct 4, 2026**; winners announced **Oct 12**. Confirmed across openhouse.arbitrum.io, the HackQuest event page, and mirrors. | re-verified 2026-09-29: openhouse.arbitrum.io, hackquest.io event page |
+| **Submission plan** | **Submit Sep 30 evening SGT**, ~4 days ahead of the deadline (R13). Confirm format rules in event Discord (still outstanding) | — |
 | Submission form | project name, one-liner, **demo video AND separate pitch video**, description, "Progress During Hackathon" changelog, team, payout wallet, deployment environment, **contract address + explorer link** (judge-only). Repo must be public with real commit history | secondhand field map (github.com/zedili/Signal402) + HackQuest best-practices blog |
 | Video length | generic guidance 2–5 min; NYC edition reportedly 1–2 min → **cap both videos at 2:00** | competehub.dev + HackQuest blog |
 | Eligibility | 18+; existing projects allowed if meaningfully developed during window (CoC wording conflicts; our repo starts clean → moot). No language requirement found → English | T&Cs §1, §3 |
@@ -126,7 +126,7 @@ Format: `#. Decision — rationale`. (V) items become D0 verification tasks with
 
 ### 3.5 Demo & submission
 30. **Time travel (V):** **demo-mode deployment.** `RiskPolicy` has an immutable `demoMode` constructor flag. Demo deployment (separate address) sets it true, enabling a `setDemoNow(uint40)` that shifts the calendar's view of time (emits `DemoTimeSet`, flagged in README as demo-only). Production deployment has `demoMode = false` and **no override path exists in the bytecode**. Chosen over timestamp-as-feature (keeps the Features struct clean and the trust story intact) and over local fork (judges can replay on the live testnet).
-31. **HackQuest format (V):** see §2.4 — repo + 2 videos (demo ≤2:00, pitch ≤2:00) + contract address/explorer link + changelog field. **Plan to Oct 1, 23:59 SGT**; confirm in Discord on D0; submit 24h early (R13).
+31. **HackQuest format (V):** see §2.4 — repo + 2 videos (demo ≤2:00, pitch ≤2:00) + contract address/explorer link + changelog field. **Deadline Oct 4**; confirm format rules in Discord; submit Sep 30 evening SGT (R13).
 32. **Demo medium (D):** recorded video primary (scripted, deterministic); live demo optional during any judging call. Judges are assumed to *watch and read*, not run code — but everything is reproducible from the README.
 33. **Language (R):** no requirement found → English for all submission material.
 34. **Eligibility (V):** existing projects allowed if meaningfully developed in-window; our repo starts clean → non-issue.
@@ -279,7 +279,7 @@ Lane decoupling guarantees:
 - C never blocks on B: demo script is written against §5 interfaces and run against a local devnode/fork until testnet addresses exist.
 - A never blocks on B: fidelity is measured Python-side against the export format; on-chain match is B's golden-vector CI.
 
-### Day plan (supersedes goal.md §9 — **2-day crash schedule**; deadline **Oct 1 15:59 UTC** = 23:59 SGT; submission planned **Sep 30 evening SGT**)
+### Day plan (supersedes goal.md §9 — **2-day crash schedule**; deadline **Oct 4**; submission planned **Sep 30 evening SGT**)
 
 | Day | Lane A | Lane B | Lane C |
 |---|---|---|---|
@@ -305,7 +305,7 @@ Lane decoupling guarantees:
 | R10 int8 overflow | Ruled out arithmetically (§2.3); property tests on feature bounds + score∈[0,10000] invariant retained as belt-and-braces. |
 | R11 Prize expectations | Corrected: payout is **25/25/50** with mainnet-launch KPI; roadmap slide written as milestone candidates accordingly. |
 | R12 Regulatory optics | Unchanged framing: infrastructure parameter feed; no advice anywhere. |
-| R13 Submission surprise | Format extracted (§2.4); **deadline planned to Oct 1 SGT**; submit 24h early. |
+| R13 Submission surprise | Format extracted (§2.4); **deadline confirmed Oct 4**; submission planned Sep 30 evening SGT. |
 
 ---
 
