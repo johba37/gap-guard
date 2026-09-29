@@ -160,8 +160,8 @@ yfinance raw bars + actions                   ┌──────────�
                               └───────────────┘          │ VolatilityOracle │
                                                          │ ring buffer ×32  │
                               ┌───────────────┐          │ poke() ≥1h,      │
-                              │ MockChainlink │◄─────────│ ±10% clamp       │
-                              │ Feed (testnet)│  clamp   └──────────────────┘
+                              │ MockChainlink │─────────►│ ±10% jump bound  │
+                              │ Feed (testnet)│  reads   └──────────────────┘
                               └──────┬────────┘
                                      ▼
                               MockLendingPool (Morpho-style isolated vault)

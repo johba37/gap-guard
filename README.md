@@ -46,13 +46,15 @@ yfinance raw bars + actions                   ┌──────────�
                               └───────────────┘          │ VolatilityOracle │
                                                          │ ring buffer ×32  │
                               ┌───────────────┐          │ poke(token) ≥1h  │
-                              │ MockChainlink │◄─────────│ ±10% clamp       │
-                              │ Feed (testnet)│  clamp   └──────────────────┘
+                              │ MockChainlink │─────────►│ ±10% jump bound  │
+                              │ Feed (testnet)│  reads   └──────────────────┘
                               └──────┬────────┘
                                      ▼
                               GapGuardPool (mock Morpho-style isolated vault)
                               borrow/withdraw gated by RiskPolicy.maxLtvBps
 ```
+
+![architecture](docs/architecture.png)
 
 Trust boundary: everything on-chain needs no operator. The only off-chain artifact
 that crosses the boundary is `student_export.json` (+ calendar table), pinned by
