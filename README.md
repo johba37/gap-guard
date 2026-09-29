@@ -21,40 +21,9 @@ cannot be profitable on its own.
 
 ## Architecture
 
-```
-Off-chain (Lane A, build time)                On-chain (Lane B, runtime)
-─────────────────────────────                 ─────────────────────────────────────────
-yfinance raw bars + actions                   ┌─────────────────────────────┐
-  → clean/adjust, drop CA-spanning gaps       │ GapRiskModel (Stylus, WASM)  │
-  → features via exchange_calendars           │ int8 MLP, pure function      │
-  → teacher bake-off (LGBM/MLP/TabPFN)        │ score(Features) → riskBps    │
-  → distill → per-channel int8 quantize       │ weightsHash() → bytes32      │
-  → student_export.json ─────────────────────→└──────────────▲──────────────┘
-  → golden_vectors.json ──────────┐                        │ view call
-  → calendar_table.json ──────┐   │               ┌─────────┴───────────────┐
-                              │   │               │ RiskPolicy (Solidity)    │
-                              ▼   ▼               │  NyseCalendar (library)  │
-                     weights + ranges +           │  score → maxLtv factor   │
-                     calendar baked at            │  hard caps, fail-closed  │
-                     deploy; verified vs          │  pause / 48h unpause     │
-                     golden vectors in CI         │  demoMode (immutable)    │
-                                                  └───▲───────────▲─────────┘
-                              ┌───────────────┐       │           │
-                              │ ModelRegistry │───────┘           │ reads
-                              │ propose/act.  │                   ▼
-                              │ + timelock    │          ┌──────────────────┐
-                              └───────────────┘          │ VolatilityOracle │
-                                                         │ ring buffer ×32  │
-                              ┌───────────────┐          │ poke(token) ≥1h  │
-                              │ MockChainlink │─────────►│ ±10% jump bound  │
-                              │ Feed (testnet)│  reads   └──────────────────┘
-                              └──────┬────────┘
-                                     ▼
-                              GapGuardPool (mock Morpho-style isolated vault)
-                              borrow/withdraw gated by RiskPolicy.maxLtvBps
-```
+![architecture](docs/architecture.png)
 
-![architecture](docs/architecture.png) ([vector SVG](docs/architecture.svg) — regenerate both from this block with `tools/render-architecture.py`)
+[vector SVG](docs/architecture.svg) · regenerate both with `tools/render-architecture.py`
 
 Trust boundary: everything on-chain needs no operator. The only off-chain artifact
 that crosses the boundary is `student_export.json` (+ calendar table), pinned by
